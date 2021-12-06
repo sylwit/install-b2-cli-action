@@ -1,0 +1,45 @@
+name: "Install Backblaze b2 cli"
+description: "Github actions for installing Backblaze b2 cli on linux"
+author: sylwit
+branding:
+  icon: download-cloud
+  color: red
+
+inputs:
+  version:
+    description: "The b2 cli version to download (if necessary) and use. Example: 3.0.3"
+    required: false
+    default: "latest"
+
+outputs:
+  version:
+    description: "The Backblaze b2 CLI version that was installed"
+    value: ${{ steps.set-output.outputs.version }}
+
+runs:
+  using: composite
+  steps:
+    - id: installing-specific-b2-version
+      if: inputs.version != 'latest'
+      shell: bash
+      run: |
+        wget -O /usr/local/bin/b2 https://github.com/Backblaze/B2_Command_Line_Tool/releases/download/v${{ inputs.version }}/b2-linux
+
+    - id: installing-latest-b2-version
+      if: inputs.version == 'latest'
+      shell: bash
+      run: |
+        wget -O /usr/local/bin/b2 https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux
+
+    - id: make-b2-executable
+      shell: bash
+      run: chmod +x /usr/local/bin/b2
+
+    - id: set-credentials
+      shell: bash
+      if: ${{ env.B2_APPLICATION_KEY_ID && env.B2_APPLICATION_KEY }}
+      run: b2 authorize-account "${B2_APPLICATION_KEY_ID}" "${B2_APPLICATION_KEY}"
+
+    - id: set-output
+      shell: bash
+      run: echo "::set-output name=version::$(b2 version)"

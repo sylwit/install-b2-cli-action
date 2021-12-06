@@ -1,0 +1,33 @@
+name: test-action
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - "ubuntu-20.04"
+          - "ubuntu-18.04"
+        #          - "macos-latest"
+        #          - "windows-latest"
+        version:
+          - "latest"
+          - "3.1.0"
+    name: Test ${{ matrix.version }} on ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2.4.0
+
+      - name: Install ${{ matrix.version }}
+        id: install-b2-cli
+        uses: sylwit/install-b2-cli-action@main
+        with:
+          version: ${{ matrix.version }}
+
+      - name: Run b2 version
+        id: b2_version
+        run: echo "::set-output name=b2_version::$(b2 version)"
+
+      - name: '${{ steps.b2_version.outputs.b2_version }}'
+        run: echo '${{ steps.b2_version.outputs.b2_version }}'
