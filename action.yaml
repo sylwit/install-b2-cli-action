@@ -42,4 +42,4 @@ runs:
 
     - id: set-output
       shell: bash
-      run: echo "::set-output name=version::$(b2 version)"
+      run: echo "version=$(b2 version)" >> $GITHUB_OUTPUT
