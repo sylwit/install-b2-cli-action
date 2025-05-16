@@ -8,8 +8,8 @@ jobs:
     strategy:
       matrix:
         os:
-          - "ubuntu-20.04"
-          - "ubuntu-18.04"
+          - "ubuntu-24.04"
+          - "ubuntu-22.04"
         #          - "macos-latest"
         #          - "windows-latest"
         version:
@@ -27,7 +27,7 @@ jobs:
 
       - name: Run b2 version
         id: b2_version
-        run: echo "::set-output name=b2_version::$(b2 version)"
+        run: echo "b2_version=$(b2 version)" >> $GITHUB_OUTPUT
 
       - name: '${{ steps.b2_version.outputs.b2_version }}'
         run: echo '${{ steps.b2_version.outputs.b2_version }}'
