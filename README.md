@@ -16,7 +16,7 @@ Add the following step to a job in your workflow
 - id: install-b2-cli
   uses: sylwit/install-b2-cli-action@v1.0.0
   with:
-    version: v3.0.1     # default to latest
+    version: 3.0.1     # default to latest
   env:
     B2_APPLICATION_KEY_ID: ${{ secrets.B2_APPLICATION_KEY_ID }}
     B2_APPLICATION_KEY: ${{ secrets.B2_APPLICATION_KEY }}
